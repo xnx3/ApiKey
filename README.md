@@ -25,6 +25,9 @@ redis.host=127.0.0.1
 redis.port=6379
 # redis服务的密码 ，默认不设置便是无密码
 redis.password=
+
+# 项目运行产生的日志文件存放到哪个目录下。 注意这个目录要提前存在，创建好。 一般默认即可，不需要改动，安装都是安装到 /mnt/key/ 目录下的
+log.path=/mnt/key/logs/
 ````
 
 其中 api. 开头的是服务于 api 端的，  admin.开头的是服务于 admin 端的。  
