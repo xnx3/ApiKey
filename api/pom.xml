@@ -145,21 +145,25 @@
 		</dependency>
 
 
-		<!-- 本地的基础功能如数据库操作等。这个wm文档及源码在  http://wm.zvo.cn  -->
-		
-		<!-- 对jsp的依赖-->
+		<!-- 热部署 -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-devtools</artifactId>
+		    <optional>true</optional>
+		</dependency>
+	  	
+	  	
+		<!-- 日志相关 https://github.com/xnx3/log -->
+		<dependency> 
+			<groupId>cn.zvo.log</groupId>
+			<artifactId>log-framework-springboot</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
+			<groupId>cn.zvo.log</groupId>
+			<artifactId>log-core</artifactId>
+			<version>1.2</version>
 		</dependency>
-
-		
 
 	</dependencies>
 	

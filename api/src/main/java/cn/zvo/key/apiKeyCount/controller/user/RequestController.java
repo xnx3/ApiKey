@@ -2,6 +2,8 @@ package cn.zvo.key.apiKeyCount.controller.user;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xnx3.BaseVO;
+import com.xnx3.DateUtil;
 import com.xnx3.Log;
 import cn.zvo.http.Response;
 import cn.zvo.key.apiKeyCount.Global;
 import cn.zvo.key.apiKeyCount.util.CacheUtil;
+import cn.zvo.key.apiKeyCount.util.ConfigPropertiesUtil;
 import cn.zvo.key.apiKeyCount.util.HttpProxy;
+import cn.zvo.key.apiKeyCount.util.IpUtil;
+import cn.zvo.log.datasource.file.FileDataSource;
+import cn.zvo.log.framework.springboot.LogUtil;
 import net.sf.json.JSONObject;
 
 /**
@@ -62,7 +69,7 @@ public class RequestController{
 		}else {
 			currentUseCount = currentUseCountObj;
 		}
-		Log.info("currentUseCount:"+currentUseCount);
+		//Log.info("currentUseCount:"+currentUseCount);
 		
 		//判断一下是否还有次数
 		if(count - currentUseCount > 0) {
@@ -76,11 +83,12 @@ public class RequestController{
 		
 		//将请求url转化为源站的
 		String targetUrl = Global.ApiDomain+getRequestUrlRemoveDomain(request);
-		Log.info("api -- "+targetUrl);
+		Log.info(request.getServletPath());
+		
 		Response res = HttpProxy.proxy(targetUrl,request);
 		response.setStatus(res.getCode());
 		Map<String, List<String>> headers = res.getHeaderFields();
-		Log.info("response headers: ");
+		//Log.info("response headers: ");
 		if(headers != null && headers.size() > 0) {
 			for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
 				if(entry.getKey() == null) {
@@ -159,9 +167,28 @@ public class RequestController{
 		/* 将当前有多少次、使用了多少次加入进去 */
 		response.setHeader("count", count+""); //当前共有多少次
 		response.setHeader("use_count", (currentUseCount+1)+"");//当前已使用了多少次（加本次的也算上了）
-		
-		/** key次数++ **/
-		CacheUtil.setKeyCountUse(key, currentUseCount+1);
+		if(res.getCode() - 200 == 0) {
+			//API响应成功
+			/** key次数++ **/
+			CacheUtil.setKeyCountUse(key, currentUseCount+1);
+			
+			FileDataSource file = new FileDataSource(Global.logPath+"key/"+key+"/");
+			List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("path", request.getServletPath());  //比如 http://localhost:8080/myapp/api/resource?param1=value1&param2=value2  这里则是 /myapp/api/resource
+			map.put("time", DateUtil.timeForUnix13()); 	
+			map.put("size", res.getContent().length()); //响应的字符串的长度
+			map.put("ip", IpUtil.getIpAddress(request));
+			map.put("count", count);
+			map.put("use_count", (currentUseCount+1));
+			list.add(map);
+			
+			FileDataSource.directoryInit(file.path);
+			file.commit("use", list);
+		}else {
+			//响应失败
+			//CacheUtil.set(CacheUtil.getCacheKey(CacheUtil.KEY_COUNT_FAILURE, key), );
+		}
 		
 		
 		PrintWriter writer = response.getWriter();

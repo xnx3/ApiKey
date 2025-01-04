@@ -32,7 +32,7 @@ public class HttpProxy {
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             String headerValue = request.getHeader(headerName);
-            System.out.println("请求头: " + headerName + " = " + headerValue);
+            //System.out.println("请求头: " + headerName + " = " + headerValue);
             if(headerName.trim().equalsIgnoreCase("host")) {
             	//过滤来源页面
             	continue;
@@ -54,7 +54,7 @@ public class HttpProxy {
             }
         }
         String requestBody = requestBodyBuilder.toString();
-        System.out.println("请求体: " + requestBody);
+       //System.out.println("请求体: " + requestBody);
         
         Http http = new Http();
         //http.setTimeout(30);
