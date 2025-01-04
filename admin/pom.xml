@@ -79,6 +79,12 @@
 					<fork>true</fork>
 					<addResources>true</addResources>
 					<mainClass>cn.zvo.Application</mainClass>
+					<excludes>
+	                    <exclude>
+	                        <groupId>com.perfma.wrapped</groupId>
+	  						<artifactId>com.sun.tools</artifactId>
+	                    </exclude>
+	                </excludes>
 				</configuration>
 				<executions>
 					<execution>

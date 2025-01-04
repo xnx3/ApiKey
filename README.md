@@ -32,3 +32,61 @@ log.path=/mnt/key/logs/
 
 其中 api. 开头的是服务于 api 端的，  admin.开头的是服务于 admin 端的。  
 如果不是这两者开头的，那就是两端共用的
+
+## 私有部署
+#### 准备工作
+服务器规格：1核1G、10G系统盘  
+操作系统： centos7.4、7.6
+#### 部署脚本
+
+````
+yum -y install wget
+yum -y install unzip
+# 校验down.zvo.cn下载源的通畅
+wget https://gitee.com/HuaweiCloudDeveloper/huaweicloud-solution-build-wangmarketcms/raw/master/shell/hosts.sh -O ~/hosts.sh && chmod -R 777 ~/hosts.sh &&  sh ~/hosts.sh
+rm -rf ~/hosts.sh
+# 安装 redis
+wget https://gitee.com/HuaweiCloudDeveloper/huaweicloud-solution-build-wangmarketcms/raw/master/shell/redis.sh -O ~/redis.sh && chmod -R 777 ~/redis.sh &&  sh ~/redis.sh
+rm -rf ~/redis.sh
+
+# 下载应用程序
+mkdir /mnt 
+cd /mnt
+mkdir key
+cd key
+mkdir logs
+mkdir bin
+cd bin
+mkdir jre8
+cd jre8
+wget http://down.zvo.cn/centos/jre8.zip -O jre8.zip
+unzip jre8.zip
+rm -rf jre8.zip
+cd ../
+wget http://down.zvo.cn/key/bin/api.jar -O api.jar
+wget http://down.zvo.cn/key/bin/admin.jar -O admin.jar
+wget http://down.zvo.cn/key/bin/database.db -O database.db
+
+cd /mnt/key/
+wget http://down.zvo.cn/key/config.properties -O config.properties
+
+
+chmod -R 777 /mnt/key/start-api.sh
+chmod -R 777 /mnt/key/start-admin.sh
+
+# 加入开机自启动
+echo '/mnt/key/start-api.sh'>>/etc/rc.d/rc.local
+echo 'cd /mnt/key/ && sh start-admin.sh'>>/etc/rc.d/rc.local
+# 赋予可执行权限
+chmod +x /mnt/key/start-admin.sh
+chmod +x /mnt/key/start-api.sh
+chmod +x /etc/rc.d/rc.local
+# 启动
+cd /mnt/key/
+sh start-api.sh
+sh start-admin.sh
+````
+注意， /mnt/key/config.properties 中的 api.domain 要设置上实际API接口所在的域名
+
+## 说明
+api服务在使用时，正常响应，会在headers响应头中，携带 count、use_count 两个参数的返回，分别代表这个key的总次数、已使用次数
