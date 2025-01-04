@@ -34,12 +34,14 @@
 	</div>
 	
 	<div class="layui-form-item" id="item_count">
-		<label class="layui-form-label">接口</label>
+		<label class="layui-form-label">限定接口</label>
 		<div class="layui-input-block">
 			<input type="text" id="url" name="url" class="layui-input" value="" />		
 			<div class="explain">
 				允许请求的API URL的接口，设置如 /a/b.json  省略掉域名部分、get参数部分。
 				<br/>如果这个key请求不在这里设置的接口，则直接返回不允许使用的错误，会被拦截。
+				<br/>如果这里留空不设置，那么这个key允许访问 config.properties 配置文件中 api.domain 中的所有资源都能被访问。
+				<br/>比如只允许能访问 http://aaa.com/a/b.json 这个接口，那么这里就填写 /a/b.json  注意，一定要按照这个格式填写，这样填写后，如果访问的不是 /a/b.json ，比如访问的是 /a/bcd.json 则会直接响应 403 拒绝访问
 			</div>	
 		</div>
 	</div>
@@ -103,6 +105,7 @@ function loadData() {
 		if (data.result == '1') {
 			// 将接口获取到的数据自动填充到 form 表单中
 			wm.fillFormValues($('form'), data.key);
+			document.getElementById('item_key').style.display='none';
 		} else if (data.result == '0') {
 			msg.failure(data.info);
 		} else {

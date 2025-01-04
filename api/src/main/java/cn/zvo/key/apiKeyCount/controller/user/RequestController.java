@@ -80,6 +80,20 @@ public class RequestController{
 			return JSONObject.fromObject(BaseVO.failure("The number of times has been used up, it has been used "+currentUseCount+" times")).toString();
 		}
 		
+		//判断是否有限定接口
+		String keyUrl = CacheUtil.getKeyUrl(key);
+		if(keyUrl.trim().length() == 0) {
+			//不限定接口，允许访问 config.properties 设置的 api.domain 的所有资源
+		}else {
+			//限制访问特定接口
+			
+			if(!keyUrl.equalsIgnoreCase(request.getServletPath())) {
+				Log.debug("key "+key+" 被限制访问 "+keyUrl+", 但实际上访问了 "+request.getServletPath()+" ,被拦截");
+				response.setStatus(403);
+				return JSONObject.fromObject(BaseVO.failure("当前key被限制访问 "+keyUrl+", 但实际上访问了 "+request.getServletPath())).toString();
+			}
+		}
+		
 		
 		//将请求url转化为源站的
 		String targetUrl = Global.ApiDomain+getRequestUrlRemoveDomain(request);

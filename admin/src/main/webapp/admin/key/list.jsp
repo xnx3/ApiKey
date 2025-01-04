@@ -25,7 +25,7 @@
 			<th>API</th>
 			<th>添加时间</th>
 			<th>总次数</th>
-			<th>剩余次数</th>
+			<th>限定接口</th>
 			<th>操作</th>
 		</tr>
 	</thead>
@@ -33,9 +33,9 @@
 		<tr v-for="item in list" id="list">
 		    <!-- [tag-7] -->
 			<td>{{item.key}}</td>
-			<td>{{item.addtime}}</td>
+			<td>{{formatTime(item.addtime,'Y-M-D h:m:s')}}</td>
 			<td>{{item.count}}</td>
-			<td>{{item.surplus}}</td>
+			<td>{{item.url}}</td>
 			<td style="width: 120px;">
 				<botton class="layui-btn layui-btn-sm"
 					:onclick="'editItem(\'' + item.key + '\', \'key=' + item.key + '\');'" style="margin-left: 3px;">编辑</botton>
@@ -63,7 +63,7 @@ function editItem(key, name) {
 	layer.open({
 		type: 2, 
 		title: key.length > 0 ? '编辑【' + key + '】' : '添加', 
-		area: ['450px', '460px'],
+		area: ['450px', '580px'],
 		shadeClose: true, // 开启遮罩关闭
 		content: '/admin/key/edit.jsp?key=' + key
 	});
