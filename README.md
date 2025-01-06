@@ -75,6 +75,11 @@ wget http://down.zvo.cn/key/start-admin.sh -O start-admin.sh
 chmod -R 777 /mnt/key/start-api.sh
 chmod -R 777 /mnt/key/start-admin.sh
 
+# 防火墙打开端口
+sudo firewall-cmd --zone=public --add-port=82/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=81/tcp --permanent
+sudo firewall-cmd --reload
+
 # 加入开机自启动
 echo 'cd /mnt/key/ && /mnt/key/start-api.sh'>>/etc/rc.d/rc.local
 echo 'cd /mnt/key/ && sh start-admin.sh'>>/etc/rc.d/rc.local
