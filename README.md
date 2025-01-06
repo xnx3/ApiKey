@@ -69,13 +69,14 @@ wget http://down.zvo.cn/key/bin/database.db -O database.db
 
 cd /mnt/key/
 wget http://down.zvo.cn/key/config.properties -O config.properties
-
+wget http://down.zvo.cn/key/start-api.sh -O start-api.sh
+wget http://down.zvo.cn/key/start-admin.sh -O start-admin.sh
 
 chmod -R 777 /mnt/key/start-api.sh
 chmod -R 777 /mnt/key/start-admin.sh
 
 # 加入开机自启动
-echo '/mnt/key/start-api.sh'>>/etc/rc.d/rc.local
+echo 'cd /mnt/key/ && /mnt/key/start-api.sh'>>/etc/rc.d/rc.local
 echo 'cd /mnt/key/ && sh start-admin.sh'>>/etc/rc.d/rc.local
 # 赋予可执行权限
 chmod +x /mnt/key/start-admin.sh
