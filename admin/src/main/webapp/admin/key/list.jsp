@@ -25,6 +25,7 @@
 			<th>API</th>
 			<th>添加时间</th>
 			<th>总次数</th>
+			<th>剩余次数</th>
 			<th>限定接口</th>
 			<th>操作</th>
 		</tr>
@@ -35,6 +36,7 @@
 			<td>{{item.key}}</td>
 			<td>{{formatTime(item.addtime,'Y-M-D h:m:s')}}</td>
 			<td>{{item.count}}</td>
+			<td>{{item.surplus}}</td>
 			<td>{{item.url}}</td>
 			<td style="width: 120px;">
 				<botton class="layui-btn layui-btn-sm"

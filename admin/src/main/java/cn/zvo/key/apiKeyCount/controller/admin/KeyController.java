@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.xnx3.CacheUtil;
 import com.xnx3.DateUtil;
 import com.xnx3.j2ee.controller.BaseController;
 import com.xnx3.j2ee.service.SqlService;
@@ -18,6 +17,7 @@ import com.xnx3.j2ee.util.Page;
 import com.xnx3.j2ee.util.Sql;
 import com.xnx3.j2ee.vo.BaseVO;
 import cn.zvo.key.apiKeyCount.entity.Key;
+import cn.zvo.key.apiKeyCount.util.CacheUtil;
 import cn.zvo.key.apiKeyCount.vo.KeyListVO;
 import cn.zvo.key.apiKeyCount.vo.KeyVO;
 
@@ -102,6 +102,18 @@ public class KeyController extends BaseController {
 		
 		// 按照上方条件查询出该实体总数 用集合来装
 		List<Key> list = sqlService.findBySql(sql, Key.class);
+		for (int i = 0; i < list.size(); i++) {
+			Key key = list.get(i);
+			//取出当前已用次数
+			Integer currentUseCountObj = (Integer) CacheUtil.get(CacheUtil.getCacheKey(CacheUtil.KEY_COUNT_USE, key.getKey()));
+			int currentUseCount = 0;
+			if(currentUseCountObj == null) {
+				currentUseCount = 0;
+			}else {
+				currentUseCount = currentUseCountObj;
+			}
+			key.setSurplus(key.getCount()-currentUseCount);
+		}
 		
 		vo.setList(list);
 		vo.setPage(page);
