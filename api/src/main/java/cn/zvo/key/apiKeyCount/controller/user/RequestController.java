@@ -37,10 +37,7 @@ import net.sf.json.JSONObject;
 public class RequestController{
 	
 	/**
-	 * 翻译
-	 * url跟to要么不传，要么会都传，如果只传其中一个，那么认为那是源站本身的，不是tcdn的参数。
-	 * @param url 源站的url，未翻译之前的页面url
-	 * @param to 翻译为什么语言显示，传入如 english
+	 * API
 	 */
 	@RequestMapping(value="**")
 	@ResponseBody
@@ -98,7 +95,6 @@ public class RequestController{
 		//将请求url转化为源站的
 		String targetUrl = Global.ApiDomain+getRequestUrlRemoveDomain(request);
 		Log.info(request.getServletPath());
-		
 		Response res = HttpProxy.proxy(targetUrl,request);
 		response.setStatus(res.getCode());
 		Map<String, List<String>> headers = res.getHeaderFields();
@@ -204,13 +200,7 @@ public class RequestController{
 			//CacheUtil.set(CacheUtil.getCacheKey(CacheUtil.KEY_COUNT_FAILURE, key), );
 		}
 		
-		
-		PrintWriter writer = response.getWriter();
-        writer.write(res.content);
-
-        // 手动刷新输出流
-        writer.flush();
-        return null;
+        return res.content;
     }
 	
 	/**

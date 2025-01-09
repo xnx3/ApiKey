@@ -24,8 +24,22 @@ import cn.zvo.http.Response;
  */
 public class HttpProxy {
 	
+	/**
+	 * 获取某个源站的代理的规则,哪些url是要通过代理转发的
+	 */
+	public static void getProxyRuleBySourceDomain() {
+		
+	}
 	
-	public static Response proxy(String url, HttpServletRequest request) throws IOException {
+	/**
+	 * 代理
+	 * @param url 要实际访问的url，代理的后端访问url
+	 * @param request 
+	 * @param appendParams 代理像后端发送请求时，是否追加参数，这个追加的参数如果跟本身请求携带参数的名字一致时，会覆盖本身请求的参数，以这个单独传入设置的为准
+	 * 			<p>只有post请求的form-data方式时，这个才会有效</p>
+	 * @return
+	 */
+	public static Response proxy(String url, HttpServletRequest request, Map<String, String> appendParams) throws IOException {
 		// 获取请求头信息
 		Map<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -54,16 +68,37 @@ public class HttpProxy {
             }
         }
         String requestBody = requestBodyBuilder.toString();
-       //System.out.println("请求体: " + requestBody);
+        //System.out.println("请求体: " + requestBody);
+        
         
         Http http = new Http();
         //http.setTimeout(30);
         Response res = null;
         if(request.getMethod().equalsIgnoreCase("POST")) {
         	if(requestBody != null && requestBody.length() > 0) {
+        		// payload 方式
         		res = http.post(url, requestBody, headers);
         	}else {
-        		res = http.post(url, new HashMap<String, String>(), headers);
+        		//form data方式
+        		Map<String, String> params = new HashMap<String, String>(); //http发送的
+        		Map<String, String[]> oriParams = request.getParameterMap();
+                for (Map.Entry<String, String[]> entry : oriParams.entrySet()) {
+                	if(entry.getValue().length > 1) {
+                		//传递的值是个数组
+                		for(int v = 0; v<entry.getValue().length; v++) {
+                			params.put(entry.getKey()+"["+v+"]", entry.getValue()[v]);
+                    	}
+                	}else if(entry.getValue().length == 1){
+                		//单个参数
+                		params.put(entry.getKey(), entry.getValue()[0]);
+                	}
+                }
+                if(appendParams != null && appendParams.size() > 0) {
+                	for (Map.Entry<String, String> entry : appendParams.entrySet()) {
+                		params.put(entry.getKey(), entry.getValue());
+                	}
+                }
+        		res = http.post(url, params, headers);
         	}
         }else if(request.getMethod().equalsIgnoreCase("GET")){
         	res = http.get(url, new HashMap<String, String>(), headers);

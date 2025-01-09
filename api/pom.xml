@@ -114,6 +114,18 @@
 	        <artifactId>spring-boot-starter-tomcat</artifactId>
 	        <scope>provided</scope>
 	    </dependency>
+	    
+	    <!-- 加上这个是为了防止打包exe后启动不起来，因为没有tomcat -->
+		<dependency>
+		  <groupId>org.apache.tomcat.embed</groupId>
+		  <artifactId>tomcat-embed-core</artifactId>
+		  <version>9.0.55</version>
+		</dependency>
+		<dependency>
+	        <groupId>org.apache.tomcat.embed</groupId>
+	        <artifactId>tomcat-embed-websocket</artifactId>
+	        <version>9.0.55</version>
+	    </dependency>
 	  	
 	  	<dependency>
 			<groupId>com.xnx3.json</groupId>
