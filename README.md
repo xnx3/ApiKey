@@ -35,62 +35,12 @@ log.path=/mnt/key/logs/
 
 ## 私有部署
 #### 准备工作
-服务器规格：1核1G、10G系统盘  
+服务器规格：1核1G、10G系统盘 、x86_64架构（Intel的CPU）
 操作系统： centos7.4、7.6
 #### 部署脚本
 
 ````
-yum -y install wget
-yum -y install unzip
-# 校验down.zvo.cn下载源的通畅
-wget https://gitee.com/HuaweiCloudDeveloper/huaweicloud-solution-build-wangmarketcms/raw/master/shell/hosts.sh -O ~/hosts.sh && chmod -R 777 ~/hosts.sh &&  sh ~/hosts.sh
-rm -rf ~/hosts.sh
-# 安装 redis
-wget https://gitee.com/HuaweiCloudDeveloper/huaweicloud-solution-build-wangmarketcms/raw/master/shell/redis.sh -O ~/redis.sh && chmod -R 777 ~/redis.sh &&  sh ~/redis.sh
-rm -rf ~/redis.sh
-
-# 下载应用程序
-mkdir /mnt 
-cd /mnt
-mkdir key
-cd key
-mkdir logs
-mkdir bin
-cd bin
-mkdir jre8
-cd jre8
-wget http://down.zvo.cn/centos/jre8.zip -O jre8.zip
-unzip jre8.zip
-rm -rf jre8.zip
-cd ../
-wget http://down.zvo.cn/key/bin/api.jar -O api.jar
-wget http://down.zvo.cn/key/bin/admin.jar -O admin.jar
-wget http://down.zvo.cn/key/bin/database.db -O database.db
-
-cd /mnt/key/
-wget http://down.zvo.cn/key/config.properties -O config.properties
-wget http://down.zvo.cn/key/start-api.sh -O start-api.sh
-wget http://down.zvo.cn/key/start-admin.sh -O start-admin.sh
-
-chmod -R 777 /mnt/key/start-api.sh
-chmod -R 777 /mnt/key/start-admin.sh
-
-# 防火墙打开端口
-sudo firewall-cmd --zone=public --add-port=82/tcp --permanent
-sudo firewall-cmd --zone=public --add-port=81/tcp --permanent
-sudo firewall-cmd --reload
-
-# 加入开机自启动
-echo 'cd /mnt/key/ && /mnt/key/start-api.sh'>>/etc/rc.d/rc.local
-echo 'cd /mnt/key/ && sh start-admin.sh'>>/etc/rc.d/rc.local
-# 赋予可执行权限
-chmod +x /mnt/key/start-admin.sh
-chmod +x /mnt/key/start-api.sh
-chmod +x /etc/rc.d/rc.local
-# 启动
-cd /mnt/key/
-sh start-api.sh
-sh start-admin.sh
+yum -y install wget && wget https://raw.githubusercontent.com/xnx3/ApiKey/refs/heads/main/else/install_apikey_api.sh -O ~/install.sh && chmod -R 777 ~/install.sh && sh ~/install.sh
 ````
 注意， /mnt/key/config.properties 中的 api.domain 要设置上实际API接口所在的域名
 

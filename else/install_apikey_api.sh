@@ -1,5 +1,5 @@
 #!/bin/bash
-# yum -y install wget && wget https://raw.githubusercontent.com/xnx3/translate/refs/heads/master/deploy/tcdn_install.sh -O ~/install.sh && chmod -R 777 ~/install.sh && sh ~/install.sh
+# yum -y install wget && wget https://raw.githubusercontent.com/xnx3/ApiKey/refs/heads/main/else/install_apikey_api.sh -O ~/install.sh && chmod -R 777 ~/install.sh && sh ~/install.sh
 #
 yum -y install wget
 yum -y install unzip
