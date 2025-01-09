@@ -16,6 +16,7 @@ import com.xnx3.Log;
 
 import cn.zvo.http.Http;
 import cn.zvo.http.Response;
+import cn.zvo.key.apiKeyCount.Global;
 
 /**
  * http请求代理转发
@@ -35,11 +36,9 @@ public class HttpProxy {
 	 * 代理
 	 * @param url 要实际访问的url，代理的后端访问url
 	 * @param request 
-	 * @param appendParams 代理像后端发送请求时，是否追加参数，这个追加的参数如果跟本身请求携带参数的名字一致时，会覆盖本身请求的参数，以这个单独传入设置的为准
-	 * 			<p>只有post请求的form-data方式时，这个才会有效</p>
 	 * @return
 	 */
-	public static Response proxy(String url, HttpServletRequest request, Map<String, String> appendParams) throws IOException {
+	public static Response proxy(String url, HttpServletRequest request) throws IOException {
 		// 获取请求头信息
 		Map<String, String> headers = new HashMap<String, String>();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -93,8 +92,8 @@ public class HttpProxy {
                 		params.put(entry.getKey(), entry.getValue()[0]);
                 	}
                 }
-                if(appendParams != null && appendParams.size() > 0) {
-                	for (Map.Entry<String, String> entry : appendParams.entrySet()) {
+                if(Global.appendParams != null && Global.appendParams.size() > 0) {
+                	for (Map.Entry<String, String> entry : Global.appendParams.entrySet()) {
                 		params.put(entry.getKey(), entry.getValue());
                 	}
                 }
