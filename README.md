@@ -44,5 +44,10 @@ yum -y install wget && wget https://raw.githubusercontent.com/xnx3/ApiKey/refs/h
 ````
 注意， /mnt/key/config.properties 中的 api.domain 要设置上实际API接口所在的域名
 
-## 说明
-api服务在使用时，正常响应，会在headers响应头中，携带 count、use_count 两个参数的返回，分别代表这个key的总次数、已使用次数
+## 使用说明
+#### admin 端使用
+访问 127.0.0.1:82 使用 账号 admin  密码 admin 进行登录使用。  
+可以添加一个key进行测试。  
+#### api 端使用
+API端是配合admin开通的key，给用户进行请求使用的  
+api服务在使用时，需要额外通过get或post额外携带一个key参数，接口如果正常响应（你的后端API响应码是200），会在headers响应头中，携带 count、use_count 两个参数的返回，分别代表这个key的总次数、已使用次数
