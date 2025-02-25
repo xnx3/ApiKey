@@ -44,5 +44,15 @@ yum -y install wget && wget https://raw.githubusercontent.com/xnx3/ApiKey/refs/h
 ````
 注意， /mnt/key/config.properties 中的 api.domain 要设置上实际API接口所在的域名
 
+#### 设置API项目回源时额外携带参数
+当用户请求到api项目中，api验证通过放行到后端服务器时，这个从api发起到后端服务器的请求可以额外携带参数，携带的参数可以以json的方式放到 /mnt/key/params.config 文件中。可以执行一下命令将这个文件直接下载下来，在这个基础上更改：
+````
+cd /mnt/key/
+wget http://down.zvo.cn/key/params.json -O params.config
+````
+这里面的是json格式。
+代理像后端发送请求时，会额外追加参数，这个追加的参数如果跟用户本身请求携带参数的名字一致时，会覆盖本身请求的参数，以这个单独传入设置的为准
+这个只有用户发起post请求、且请求方式是formdata方式时才会有效，其他方式比如payload方式发送消息体、以及get方式请求，并不会携带 params.config 中自定义设置的参数。
+
 ## 说明
 api服务在使用时，正常响应，会在headers响应头中，携带 count、use_count 两个参数的返回，分别代表这个key的总次数、已使用次数
