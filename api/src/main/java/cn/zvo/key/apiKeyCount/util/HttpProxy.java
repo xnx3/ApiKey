@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.xnx3.BaseVO;
 import com.xnx3.Log;
+import com.xnx3.StringUtil;
 
 import cn.zvo.http.Http;
 import cn.zvo.http.Response;
@@ -85,11 +86,11 @@ public class HttpProxy {
                 	if(entry.getValue().length > 1) {
                 		//传递的值是个数组
                 		for(int v = 0; v<entry.getValue().length; v++) {
-                			params.put(entry.getKey()+"["+v+"]", entry.getValue()[v]);
+                			params.put(entry.getKey()+"["+v+"]", StringUtil.stringToUrl(entry.getValue()[v]));
                     	}
                 	}else if(entry.getValue().length == 1){
                 		//单个参数
-                		params.put(entry.getKey(), entry.getValue()[0]);
+                		params.put(entry.getKey(), StringUtil.stringToUrl(entry.getValue()[0]));
                 	}
                 }
                 if(Global.appendParams != null && Global.appendParams.size() > 0) {
