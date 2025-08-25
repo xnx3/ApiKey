@@ -41,6 +41,9 @@ public class Application {
 		
 		context = SpringApplication.run(Application.class, args);
 		Application.args = args;
+		
+		
+		
 	}
 	
 }

@@ -65,7 +65,7 @@ function editItem(key, name) {
 	layer.open({
 		type: 2, 
 		title: key.length > 0 ? '编辑【' + key + '】' : '添加', 
-		area: ['450px', '580px'],
+		area: ['550px', '620px'],
 		shadeClose: true, // 开启遮罩关闭
 		content: '/admin/key/edit.jsp?key=' + key
 	});

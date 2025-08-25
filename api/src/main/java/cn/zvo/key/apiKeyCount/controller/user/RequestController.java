@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xnx3.BaseVO;
 import com.xnx3.DateUtil;
 import com.xnx3.Log;
+import com.xnx3.StringUtil;
+
 import cn.zvo.http.Response;
 import cn.zvo.key.apiKeyCount.Global;
 import cn.zvo.key.apiKeyCount.util.CacheUtil;
@@ -44,7 +47,6 @@ public class RequestController{
 	public String all(HttpServletRequest request, HttpServletResponse response, Model model,
 			@RequestParam(value = "key", defaultValue = "") String key
 			) throws IOException{
-		
 		if(key.length() != 64) {
 			response.setStatus(403);
 			return JSONObject.fromObject(BaseVO.failure("Key format error")).toString();
@@ -91,6 +93,20 @@ public class RequestController{
 			}
 		}
 		
+		//判断是否有限定必传字段
+		String keyFromFieldRequired = CacheUtil.getKeyFromFieldRequired(keyUrl);
+		if(keyFromFieldRequired != null && keyFromFieldRequired.length() > 0) {
+			String[] fields = keyFromFieldRequired.split(",");
+			for(int f = 0; f<fields.length; f++) {
+				String field = fields[f].trim();
+				if(field.length() < 0) {
+					continue;
+				}
+				if(StringUtils.isEmpty(request.getParameter(field))) {
+					return JSONObject.fromObject(BaseVO.failure("当前key的"+field+"为必传，您尚未传此参数")).toString();
+				}
+			}
+		}
 		
 		//将请求url转化为源站的
 		String targetUrl = Global.ApiDomain+getRequestUrlRemoveDomain(request);

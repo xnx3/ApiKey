@@ -163,6 +163,8 @@ public class KeyController extends BaseController {
 	 * @param addtime 添加时间 
 	 * @param count 总次数 
 	 * @param surplus 剩余次数 
+	 * @param url 允许请求的API URL的接口，设置如 /a/b.json  省略掉域名部分
+	 * @param fromFieldRequired 当前请求的必填字段，request.getParameters.... 获取参数进行判断，url传参跟post提交的 application/x-www-form-urlencoded 传参都可以，多个用英文逗号分割。 这个字段最多存200字符。 空字符串或null则是不做限制
 	 * @return 保存结果
 	 * @author <a href="https://github.com/xnx3/writecode">WriteCode自动生成</a>
 	 */
@@ -175,6 +177,7 @@ public class KeyController extends BaseController {
 			@RequestParam(value = "count", required = false, defaultValue = "0") int count,
 			@RequestParam(value = "surplus", required = false, defaultValue = "0") int surplus,
 			@RequestParam(value = "url", required = false, defaultValue = "") String url,
+			@RequestParam(value = "fromFieldRequired", required = false, defaultValue = "") String fromFieldRequired,
 			HttpServletRequest request) {
 
         /**
@@ -214,6 +217,10 @@ public class KeyController extends BaseController {
 			cn.zvo.key.apiKeyCount.util.CacheUtil.setKeyUrl(entity.getKey(), url);
 		}
 		entity.setUrl(url);
+		if(!entity.getFromFieldRequired().equals(fromFieldRequired)) {
+			cn.zvo.key.apiKeyCount.util.CacheUtil.setKeyFromFieldRequired(key, fromFieldRequired);
+		}
+		entity.setFromFieldRequired(fromFieldRequired);
 		// 保存实体
 		sqlService.save(entity);
 		

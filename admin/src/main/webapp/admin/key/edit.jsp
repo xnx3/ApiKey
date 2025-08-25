@@ -46,6 +46,18 @@
 		</div>
 	</div>
 	
+	<div class="layui-form-item" id="item_count">
+		<label class="layui-form-label">必传字段</label>
+		<div class="layui-input-block">
+			<input type="text" id="fromFieldRequired" name="fromFieldRequired" class="layui-input" value="" />		
+			<div class="explain">
+				请求的必填字段，url传参、post提交的 application/x-www-form-urlencoded 传参都可以
+				<br/>多个用英文逗号分割。 这个字段最多存200字符。 空字符串或null则是不做限制
+				<br/>比如这里设置为 a,b 那么通过这个key请求接口时，必须要在get传参里携带a、b这两个传参比如 /api?a=1&b=2 、或post application/x-www-form-urlencoded 提交时要携带这两个参数的传参。
+			</div>	
+		</div>
+	</div>
+	
 	<div class="layui-form-item">
 		<div class="layui-input-block">
 			<a class="layui-btn" onclick="save()">立即保存</a>

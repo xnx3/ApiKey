@@ -48,7 +48,7 @@
 	<parent>
 	    <groupId>com.xnx3.wangmarket.wm</groupId>
 	    <artifactId>parent</artifactId>
-	    <version>3.22</version>
+	    <version>3.27</version>
 	</parent>
 
 	<build>
@@ -116,7 +116,7 @@
 		<dependency>
 			<groupId>com.xnx3.wangmarket.wm</groupId>
 			<artifactId>wm</artifactId>
-			<version>3.23</version>
+			<version>3.27</version>
 		</dependency>
 
 		<!-- 对jsp的依赖-->

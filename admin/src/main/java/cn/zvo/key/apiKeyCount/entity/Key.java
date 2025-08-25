@@ -22,6 +22,7 @@ public class Key implements java.io.Serializable{
 	private Integer count;	//总次数 
 	private Integer surplus;	//剩余次数 
 	private String url;		//允许请求的API URL的接口，设置如 /a/b.json  省略掉域名部分
+	private String fromFieldRequired; //当前请求的必填字段，request.getParameters.... 获取参数进行判断，url传参跟post提交的 application/x-www-form-urlencoded 传参都可以，多个用英文逗号分割。 这个字段最多存200字符。 空字符串或null则是不做限制
 	
 	public Key() {
 		this.key = Lang.uuid()+Lang.uuid();
@@ -69,9 +70,19 @@ public class Key implements java.io.Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	
+	@Column(name = "from_field_required", columnDefinition="char(200)")
+	public String getFromFieldRequired() {
+		return fromFieldRequired;
+	}
+
+	public void setFromFieldRequired(String fromFieldRequired) {
+		this.fromFieldRequired = fromFieldRequired;
+	}
 
 	@Override
 	public String toString() {
-		return "{key : "+this.key+", addtime : "+this.addtime+", count : "+this.count+", surplus : "+this.surplus+"}";
+		return "{key : "+this.key+", addtime : "+this.addtime+", count : "+this.count+", surplus : "+this.surplus+", fromFieldRequired:"+ this.fromFieldRequired+"}";
 	}
 }

@@ -1,6 +1,5 @@
 package cn.zvo.key.apiKeyCount.util;
 
-import com.xnx3.doc.Log;
 
 public class CacheUtil extends com.xnx3.CacheUtil{
 	
@@ -22,6 +21,11 @@ public class CacheUtil extends com.xnx3.CacheUtil{
 	 * 当前key所允许的url，也就是 key数据表的url字段的值
 	 */
 	public static final String KEY_URL = "{key}:url";
+	
+	/**
+	 * 当前key所对应的必传字段fromFieldRequired
+	 */
+	public static final String FROM_FIELD_REQUIRED_URL = "{fromFieldRequired}:url";
 	
 	/**
 	 * 生成用于redis缓存的key
@@ -69,10 +73,34 @@ public class CacheUtil extends com.xnx3.CacheUtil{
 		set(getCacheKey(KEY_URL, key), url);
 	}
 	
+
+	/**
+	 * 设置某个key的 fromFieldRequired
+	 * @param key 数据表key
+	 * @param fromFieldRequired 数据表的 fromFieldRequired
+	 */
+	public static void setKeyFromFieldRequired(String key, String fromFieldRequired) {
+		if(fromFieldRequired == null) {
+			fromFieldRequired = "";
+		}
+		set(getCacheKey(FROM_FIELD_REQUIRED_URL, key), fromFieldRequired);
+	}
+	
+	/**
+	 * 获取某个key的fromFieldRequired
+	 * @param key 数据表key
+	 */
+	public static String getKeyFromFieldRequired(String key) {
+		String fromFieldRequired = (String) get(getCacheKey(FROM_FIELD_REQUIRED_URL, key));
+		if(fromFieldRequired == null) {
+			fromFieldRequired = "";
+		}
+		return fromFieldRequired;
+	}
+	
 	/**
 	 * 获取某个key的允许 url
 	 * @param key 数据表key
-	 * @return url 数据表key的url ，如果不存在，返回 空字符串
 	 */
 	public static String getKeyUrl(String key) {
 		String url = (String) get(getCacheKey(KEY_URL, key));
