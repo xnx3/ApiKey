@@ -30,8 +30,15 @@ redis.password=
 log.path=/mnt/key/logs/
 ````
 
+注意的是，开发环境下，不要直接修改项目的这个配置，而是修改 /mnt/key/config.properties 这个文件，这个文件是项目启动时会读取的配置文件。  如果是windows环境，会在存放代码的磁盘根路径下比如 D:/mnt/key/config.properties 建立这个文件
+  
+
 其中 api. 开头的是服务于 api 端的，  admin.开头的是服务于 admin 端的。  
 如果不是这两者开头的，那就是两端共用的
+
+## 打包
+mvn clean package 直接打包，会在 target 目录下生成相关jar文件
+
 
 ## 私有部署
 #### 准备工作
@@ -56,3 +63,11 @@ wget http://down.zvo.cn/key/params.json -O params.config
 
 ## 说明
 api服务在使用时，正常响应，会在headers响应头中，携带 count、use_count 两个参数的返回，分别代表这个key的总次数、已使用次数
+
+## 使用
+#### admin 端
+admin 端是一个可视化管理后台，可以开通key、对key进行管理、设置key的可用次数、设置key允许使用的接口等，它是给自己管理人员使用，用于进行管理的。
+登录后台  http://localhost:82  ，默认账号密码都是 admin 。
+
+
+
