@@ -217,7 +217,7 @@ public class KeyController extends BaseController {
 			cn.zvo.key.apiKeyCount.util.CacheUtil.setKeyUrl(entity.getKey(), url);
 		}
 		entity.setUrl(url);
-		if(!entity.getFromFieldRequired().equals(fromFieldRequired)) {
+		if(!fromFieldRequired.equals(entity.getFromFieldRequired())) {
 			cn.zvo.key.apiKeyCount.util.CacheUtil.setKeyFromFieldRequired(key, fromFieldRequired);
 		}
 		entity.setFromFieldRequired(fromFieldRequired);
